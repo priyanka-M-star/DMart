@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-purple: #9d4edd;
+            --neon-blue: #4895ef;
+            --neon-magenta: #e639af;
+            --dark-bg: #0f0f1a;
+            --darker-bg: #0a0a12;
+            --card-bg: #1a1a2e;
+            --text-light: #f8f9fa;
+            --text-muted: #adb5bd;
+            --gradient-purple-blue: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+            --gradient-purple-magenta: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-magenta) 100%);
+            --gradient-blue-magenta: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-magenta) 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(157, 78, 221, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(72, 149, 239, 0.1) 0%, transparent 25%);
+        }
+        
+        .navbar {
+            background: var(--darker-bg);
+            border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(157, 78, 221, 0.7);
+            color: var(--neon-purple) !important;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-purple-magenta);
+        }
+        
+        .product-img {
+            height: 220px;
+            object-fit: cover;
+            background: linear-gradient(145deg, #1e1e3a 0%, #252545 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-img i {
+            font-size: 4.5rem;
+            background: linear-gradient(to right, var(--neon-purple), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-purple-blue);
+            border: none;
+            padding: 12px 28px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            background-size: 200% auto;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+        }
+        
+        .btn-primary:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.7);
+        }
+        
+        .btn-buy {
+            background: var(--gradient-purple-magenta);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+        }
+        
+        .btn-buy:hover {
+            background: var(--gradient-blue-magenta);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.7);
+        }
+        
+        .sold-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(214, 48, 49, 0.9);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(214, 48, 49, 0.5);
+            z-index: 2;
+        }
+        
+        .form-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(157, 78, 221, 0.2);
+        }
+        
+        .wallet-info {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.2);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+        }
+        
+        .price-tag {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--neon-purple), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+        }
+        
+        .owner-badge {
+            background: rgba(157, 78, 221, 0.1);
+            color: var(--neon-purple);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+            display: inline-block;
+            border: 1px solid rgba(157, 78, 221, 0.3);
+        }
+        
+        /* Neon glow effect */
+        .glow {
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(157, 78, 221, 0.8), 0 0 30px rgba(157, 78, 221, 0.6);
+            }
+        }
+        
+        /* Form inputs */
+        .form-control {
+            background-color: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            color: var(--text-light);
+        }
+        
+        .form-control:focus {
+            background-color: rgba(26, 26, 46, 0.9);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+            color: var(--text-light);
+        }
+        
+        .input-group-text {
+            background-color: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            color: var(--neon-purple);
+        }
+        
+        /* Modal styling */
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+            background: var(--gradient-purple-magenta);
+        }
+        
+        /* Text colors */
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .product-img {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-store me-2"></i> Neon Market
+            </a>
+            <div class="wallet-info text-light" id="walletInfo">
+                <span class="me-3"><i class="fas fa-wallet me-1"></i> <span id="walletAddress"></span></span>
+                <span><i class="fas fa-coins me-1"></i> <span id="walletBalance"></span> ETH</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <!-- List Product Form -->
+        <div class="row mb-5">
+            <div class="col-lg-6 mx-auto">
+                <div class="form-container glow">
+                    <h3 class="text-center mb-4" style="color: var(--neon-purple);"><i class="fas fa-plus-circle me-2"></i>List New Product</h3>
+                    <form id="productForm">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: var(--neon-blue);">Product Name</label>
+                            <input type="text" class="form-control form-control-lg" id="productName" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: var(--neon-blue);">Price (ETH)</label>
+                            <div class="input-group">
+                                <input type="number" step="0.01" min="0.01" class="form-control form-control-lg" id="productPrice" required>
+                                <span class="input-group-text">ETH</span>
+                            </div>
+                            <small class="text-muted">Minimum 0.01 ETH</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 mt-2">
+                            <i class="fas fa-upload me-2"></i>List Product
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <h3 class="text-center mb-4" style="color: var(--neon-purple);"><i class="fas fa-box-open me-2"></i>Available Products</h3>
+        <div class="row g-4" id="productsGrid">
+            <div class="col-12 text-center">
+                <div class="spinner-border" style="color: var(--neon-purple);"></div>
+                <p class="mt-2">Loading products...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div class="modal fade" id="transactionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: var(--neon-purple);"></div>
+                    <h5 id="modalMessage">Processing Transaction</h5>
+                    <div id="modalError" class="alert alert-danger mt-3 d-none"></div>
+                    <a id="txHashLink" href="#" target="_blank" class="small text-muted d-block mt-3"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script>
+        // Contract ABI
+        const contractABI = [
+           REPLCE YOUR ABI FILE HERE];
+        
+        const contractAddress = "REPLACE YOUR CONTACT ADDRESS HERE";
+        
+        let web3, contract, accounts;
+        const transactionModal = new bootstrap.Modal('#transactionModal');
+
+        // Initialize
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    contract = new web3.eth.Contract(contractABI, contractAddress);
+                    initApp();
+                } catch (error) {
+                    console.error("User denied account access");
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        });
+
+        function initApp() {
+            updateWalletInfo();
+            loadProducts();
+            
+            // Form submission
+            document.getElementById('productForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('productName').value;
+                const priceEth = document.getElementById('productPrice').value;
+                
+                if (!name || !priceEth) return;
+                
+                try {
+                    showModal('Listing Product', 'Creating your product listing...');
+                    const priceWei = web3.utils.toWei(priceEth, 'ether');
+                    
+                    const tx = await contract.methods.listProduct(name, priceWei)
+                        .send({ from: accounts[0], gas: 500000 });
+                    
+                    updateModalWithTx(tx.transactionHash, 'Product listed successfully!');
+                    document.getElementById('productForm').reset();
+                    loadProducts();
+                } catch (error) {
+                    showError(error);
+                }
+            });
+        }
+
+        // Load products with beautiful cards
+        async function loadProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '<div class="col-12 text-center"><div class="spinner-border" style="color: var(--neon-purple);"></div><p class="mt-2">Loading products...</p></div>';
+            
+            try {
+                const count = await contract.methods.productCount().call();
+                let productsHTML = '';
+                
+                for (let i = 1; i <= count; i++) {
+                    const product = await contract.methods.products(i).call();
+                    if (product.id == 0) continue;
+                    
+                    const priceEth = web3.utils.fromWei(product.price, 'ether');
+                    const isOwner = product.owner.toLowerCase() === accounts[0].toLowerCase();
+                    const icon = getProductIcon(product.name);
+                    
+                    productsHTML += `
+                        <div class="col-md-4 col-lg-3">
+                            <div class="card h-100">
+                                ${product.sold ? '<div class="sold-badge"><i class="fas fa-tag me-1"></i>SOLD</div>' : ''}
+                                
+                                <div class="product-img">
+                                    <i class="fas ${icon}"></i>
+                                </div>
+                                
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <div class="price-tag">${priceEth} ETH</div>
+                                    <div class="owner-badge mb-3">
+                                        <i class="fas fa-user-circle me-1"></i>${shortenAddress(product.owner)}
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer bg-transparent border-0 pt-0">
+                                    ${!product.sold ? 
+                                        `<button onclick="handleBuy(${product.id}, '${product.price}')" 
+                                         class="btn btn-buy w-100 py-2">
+                                            <i class="fas fa-shopping-cart me-2"></i>Buy Now
+                                         </button>` : 
+                                        `<button class="btn btn-outline-secondary w-100 py-2" disabled>
+                                            <i class="fas fa-check-circle me-2"></i>Sold
+                                         </button>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                productsGrid.innerHTML = productsHTML || `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-box-open text-muted" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3 text-muted">No products available</h5>
+                    </div>
+                `;
+            } catch (error) {
+                productsGrid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3 text-danger">Error loading products</h5>
+                        <p class="text-muted">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Handle buy product
+        window.handleBuy = async (productId, priceWei) => {
+            try {
+                showModal('Purchase', 'Processing your purchase...');
+                
+                const tx = await contract.methods.buyProduct(productId)
+                    .send({ 
+                        from: accounts[0], 
+                        value: priceWei,
+                        gas: 500000 
+                    });
+                
+                updateModalWithTx(tx.transactionHash, 'Purchase successful!');
+                loadProducts();
+            } catch (error) {
+                showError(error);
+            }
+        };
+
+        // Helper functions
+        function getProductIcon(name) {
+            const lcName = name.toLowerCase();
+            if (lcName.includes('laptop')) return 'fa-laptop';
+            if (lcName.includes('phone')) return 'fa-mobile-alt';
+            if (lcName.includes('book')) return 'fa-book';
+            if (lcName.includes('art')) return 'fa-palette';
+            return 'fa-box-open';
+        }
+
+        function updateWalletInfo() {
+            document.getElementById('walletAddress').textContent = 
+                `${accounts[0].substring(0, 6)}...${accounts[0].substring(38)}`;
+                
+            web3.eth.getBalance(accounts[0]).then(balance => {
+                document.getElementById('walletBalance').textContent = 
+                    web3.utils.fromWei(balance, 'ether').substring(0, 6);
+            });
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalError').classList.add('d-none');
+            document.getElementById('txHashLink').textContent = '';
+            transactionModal.show();
+        }
+
+        function updateModalWithTx(txHash, successMessage) {
+            const link = document.getElementById('txHashLink');
+            link.href = `https://sepolia.etherscan.io/tx/${txHash}`;
+            link.innerHTML = `<i class="fas fa-external-link-alt me-1"></i>View on Etherscan`;
+            
+            document.getElementById('modalMessage').innerHTML = `
+                <i class="fas fa-check-circle me-2" style="color: var(--neon-purple);"></i>${successMessage}
+            `;
+            document.getElementById('modalTitle').textContent = 'Success';
+            document.querySelector('.spinner-border').classList.replace('spinner-border', 'd-none');
+        }
+
+        function showError(error) {
+            let errorMsg = error.message;
+            if (errorMsg.includes("revert")) {
+                errorMsg = errorMsg.split("revert ")[1] || "Transaction failed";
+            }
+            
+            const errorDiv = document.getElementById('modalError');
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>${errorMsg}`;
+            errorDiv.classList.remove('d-none');
+            
+            document.querySelector('.spinner-border').classList.replace('spinner-border', 'd-none');
+        }
+
+        function shortenAddress(address) {
+            return `${address.substring(0, 6)}...${address.substring(38)}`;
+        }
+    </script>
+</body>
+</html>
